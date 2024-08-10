@@ -1,0 +1,11 @@
+//? for react.js project
+{
+  "include": ["**/*"],
+  "exclude": ["node_modules", "**/node_modules", "dist", "build"],
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node"
+  }
+}
