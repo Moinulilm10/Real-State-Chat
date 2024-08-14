@@ -1,12 +1,14 @@
+import "../../style/singlepage.scss";
 import { singlePostData, userData } from "../lib/DummyData";
 import Map from "../Map/Map";
+import Slider from "../ui/Slider";
 
 const SingleDetailsPage = () => {
   return (
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          {/* slider component */}
+          <Slider images={singlePostData.images} />
           <div className="info">
             <div className="top">
               <div className="post">
