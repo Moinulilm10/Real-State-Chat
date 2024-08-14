@@ -1,7 +1,7 @@
 import "../../style/listpage.scss";
-import Filter from "../Filter/Filter";
+import Filter from "../filter/Filter";
 import { ListData } from "../lib/DummyData";
-import Map from "../Map/Map";
+import Map from "../map/Map";
 import Card from "../ui/Card";
 
 const ListPage = () => {

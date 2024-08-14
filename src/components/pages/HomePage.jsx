@@ -1,5 +1,5 @@
 import "../../style/homepage.scss";
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "../searchbar/SearchBar";
 const HomePage = () => {
   return (
     <div className="homePage">

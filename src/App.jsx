@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./components/pages/HomePage";
 import ListPage from "./components/pages/ListPage";
+import ProfilePage from "./components/pages/profile/ProfilePage";
 import SingleDetailsPage from "./components/pages/SingleDetailsPage";
 import Layout from "./components/ui/Layout";
 import "./style/layout.scss";
@@ -22,6 +23,10 @@ function App() {
         {
           path: "/:id",
           element: <SingleDetailsPage />,
+        },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
         },
       ],
     },
