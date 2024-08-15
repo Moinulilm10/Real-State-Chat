@@ -8,7 +8,7 @@ const LoginPage = () => {
         <LoginForm />
       </div>
       <div className="imgContainer">
-        <img src="/bg.png" alt="" />
+        <img src="/bg.png" alt="login-image" />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ const RegisterPage = () => {
         <RegisterForm />
       </div>
       <div className="imgContainer">
-        <img src="/bg.png" alt="" />
+        <img src="/bg.png" alt="signup-image" />
       </div>
     </div>
   );
