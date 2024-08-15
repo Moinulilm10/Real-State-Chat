@@ -17,6 +17,7 @@ const NewPostForm = () => {
       </div>
       <div className="item description">
         <label htmlFor="desc">Description</label>
+        <textarea name="description" id="description"></textarea>
       </div>
       <div className="item">
         <label htmlFor="city">City</label>

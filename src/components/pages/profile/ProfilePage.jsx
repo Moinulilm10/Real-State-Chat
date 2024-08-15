@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../../../style/profilepage.scss";
 import Chat from "../../chat/Chat";
 import ListPage from "../ListPage";
@@ -28,7 +29,9 @@ const ProfilePage = () => {
           </div>
           <div className="title">
             <h1>My List</h1>
-            <button>Create New Post</button>
+            <button>
+              <Link to="/post">Create New Post</Link>
+            </button>
           </div>
           <ListPage />
           <div className="title">
