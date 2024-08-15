@@ -1,7 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./components/pages/HomePage";
 import ListPage from "./components/pages/ListPage";
+import LoginPage from "./components/pages/LoginPage";
 import ProfilePage from "./components/pages/profile/ProfilePage";
+import RegisterPage from "./components/pages/RegisterPage";
 import SingleDetailsPage from "./components/pages/SingleDetailsPage";
 import Layout from "./components/ui/Layout";
 import "./style/layout.scss";
@@ -27,6 +29,14 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />,
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
+        },
+        {
+          path: "/signup",
+          element: <RegisterPage />,
         },
       ],
     },
