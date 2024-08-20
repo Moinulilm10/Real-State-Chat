@@ -1,3 +1,4 @@
+// import "leaflet/dist/leaflet.css";
 import { Marker, Popup } from "react-leaflet";
 import { Link } from "react-router-dom";
 import "../../style/pin.scss";
