@@ -24,3 +24,21 @@ export const createUser = async (userData) => {
     throw new Error("Failed to create user");
   }
 };
+
+/**
+ * Retrieves a user from the database by username.
+ * @param {string} username - The username to search for.
+ * @returns {Promise<object>} The user object if found, or throws an error if not found or on query failure.
+ */
+
+export const findUserByUsername = async (username) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+    return user;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to find user by username");
+  }
+};

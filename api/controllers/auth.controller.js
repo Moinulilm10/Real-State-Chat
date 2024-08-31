@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
-import { createUser } from "../models/Users.model.js";
+import jwt from "jsonwebtoken";
+import { createUser, findUserByUsername } from "../models/Users.model.js";
 
 export const register = async (req, res) => {
   // db operations
@@ -26,8 +27,50 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Failed to create user!" });
   }
 };
-export const login = (req, res) => {
-  // db operations
+export const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await findUserByUsername(username);
+
+    if (!user) return res.status(401).json({ message: "Invalid Credentials!" });
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid)
+      return res.status(401).json({ message: "Invalid Credentials!" });
+
+    const age = 1000 * 60 * 60 * 24; // token expire time
+
+    /* This code snippet is generating a JSON Web Token (JWT) using the `jwt.sign` method provided by
+    the `jsonwebtoken` library. */
+    const token = jwt.sign(
+      {
+        id: user.id,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: age }
+    );
+
+    const { password: userPassword, ...userInfo } = user;
+
+    /* This code snippet is setting a cookie named "token" in the response object (`res`) with the
+    generated JWT token (`token`). The cookie is configured with the following options:
+    - `httpOnly: true`: This option restricts the cookie to be accessed only by the server and not
+    by client-side scripts, enhancing security by preventing cross-site scripting attacks.
+    - `maxAge: age`: This sets the expiration time of the cookie to `age` milliseconds from the
+    current time. */
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: age,
+      })
+      .status(200)
+      .json(userInfo);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to login!" });
+  }
 };
 export const logout = (req, res) => {
   // db operations
