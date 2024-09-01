@@ -1,7 +1,7 @@
-import "../../style/singlepage.scss";
-import { singlePostData, userData } from "../lib/DummyData";
-import Map from "../map/Map";
-import Slider from "../ui/Slider";
+import { singlePostData, userData } from "../components/lib/DummyData";
+import Map from "../components/map/Map.jsx";
+import Slider from "../components/ui/Slider.jsx";
+import "../style/singlepage.scss";
 
 const SingleDetailsPage = () => {
   return (

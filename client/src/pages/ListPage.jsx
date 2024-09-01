@@ -1,8 +1,8 @@
-import "../../style/listpage.scss";
-import Filter from "../filter/Filter";
-import { ListData } from "../lib/DummyData";
-import Map from "../map/Map";
-import Card from "../ui/Card";
+import Filter from "../components/filter/Filter.jsx";
+import { ListData } from "../components/lib/DummyData";
+import Map from "../components/map/Map.jsx";
+import Card from "../components/ui/Card.jsx";
+import "../style/listpage.scss";
 
 const ListPage = () => {
   const data = ListData;

@@ -1,5 +1,5 @@
-import "../../style/register.scss";
-import RegisterForm from "../auth/RegisterForm";
+import RegisterForm from "../components/auth/RegisterForm.jsx";
+import "../style/register.scss";
 
 const RegisterPage = () => {
   return (

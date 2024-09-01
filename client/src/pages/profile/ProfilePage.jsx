@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import "../../../style/profilepage.scss";
-import Chat from "../../chat/Chat";
+import Chat from "../../components/chat/Chat.jsx";
+import "../../style/profilepage.scss";
 import ListPage from "../ListPage";
 
 const ProfilePage = () => {

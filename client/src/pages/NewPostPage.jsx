@@ -1,5 +1,5 @@
-import "../../style/newpostpage.scss";
-import NewPostForm from "../NewPost/NewPostForm";
+import NewPostForm from "../components/newpost/NewPostForm.jsx";
+import "../style/newpostpage.scss";
 
 const NewPostPage = () => {
   return (
