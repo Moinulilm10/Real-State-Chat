@@ -1,9 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat.jsx";
+import api from "../../components/lib/axiosInstance.js";
 import "../../style/profilepage.scss";
 import ListPage from "../ListPage";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const res = await api.post("/auth/logout");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="profilePage">
       <div className="details">
@@ -26,6 +38,7 @@ const ProfilePage = () => {
             <span>
               E-mail: <b>john@gmail.com</b>
             </span>
+            <button onClick={handleLogout}>Logout</button>
           </div>
           <div className="title">
             <h1>My List</h1>
