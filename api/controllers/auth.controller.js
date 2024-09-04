@@ -41,7 +41,18 @@ export const login = async (req, res) => {
     if (!isPasswordValid)
       return res.status(401).json({ message: "Invalid Credentials!" });
 
-    const token = generateNewToken(user);
+    const isAdmin = false;
+
+    const token = generateNewToken(user, isAdmin);
+
+    // const token = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     isAdmin: true,
+    //   },
+    //   process.env.JWT_SECRET_KEY,
+    //   { expiresIn: process.env.TOKEN_EXPIRE_TIME }
+    // );
 
     const { password: userPassword, ...userInfo } = user;
 
