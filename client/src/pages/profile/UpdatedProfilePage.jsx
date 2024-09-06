@@ -1,4 +1,4 @@
-import "../../../style/updatedprofilepage.scss";
+import "../../style/updatedprofilepage.scss";
 
 function ProfileUpdatePage() {
   return (

@@ -1,15 +1,21 @@
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import avatarImage from "../../assets/noavatar.jpg";
 import Chat from "../../components/chat/Chat.jsx";
 import api from "../../components/lib/axiosInstance.js";
+import { AuthContext } from "../../contexts/AuthContext.jsx";
 import "../../style/profilepage.scss";
 import ListPage from "../ListPage";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
 
+  const { updateUser, currentUser } = useContext(AuthContext);
+
   const handleLogout = async () => {
     try {
       const res = await api.post("/auth/logout");
+      updateUser(null);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -27,16 +33,13 @@ const ProfilePage = () => {
           <div className="info">
             <span>
               Avatar:
-              <img
-                src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                alt=""
-              />
+              <img src={currentUser.avatar || avatarImage} alt="avatar_image" />
             </span>
             <span>
-              Username: <b>John Doe</b>
+              Username: <b>{currentUser.username}</b>
             </span>
             <span>
-              E-mail: <b>john@gmail.com</b>
+              E-mail: <b>{currentUser.email}</b>
             </span>
             <button onClick={handleLogout}>Logout</button>
           </div>

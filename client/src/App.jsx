@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/ui/Layout";
+import { Layout, RequireAuth } from "./components/ui/Layout";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
 import LoginPage from "./pages/LoginPage";
@@ -7,6 +7,7 @@ import NewPostPage from "./pages/NewPostPage";
 import RegisterPage from "./pages/RegisterPage";
 import SingleDetailsPage from "./pages/SingleDetailsPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import ProfileUpdatePage from "./pages/profile/UpdatedProfilePage";
 import "./style/layout.scss";
 
 function App() {
@@ -38,6 +39,24 @@ function App() {
         {
           path: "/signup",
           element: <RegisterPage />,
+        },
+        {
+          path: "/post",
+          element: <NewPostPage />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <RequireAuth />,
+      children: [
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "/profile/update",
+          element: <ProfileUpdatePage />,
         },
         {
           path: "/post",

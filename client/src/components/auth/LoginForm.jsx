@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import "../../style/login.scss";
 import api from "../lib/axiosInstance";
 
 const LoginForm = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { updateUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -26,7 +29,11 @@ const LoginForm = () => {
         password,
       });
 
-      console.log(res);
+      // console.log(res.data);
+
+      updateUser(res.data);
+
+      navigate("/");
     } catch (error) {
       setError(error.response.data.message);
     } finally {
