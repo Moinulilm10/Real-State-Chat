@@ -7,6 +7,7 @@ nav {
   align-items: center;
 
   a {
+    cursor: pointer;
     transition: all 0.4s ease;
 
     @include sm {
@@ -63,6 +64,14 @@ nav {
       padding: 12px 24px;
       margin: 20px;
       cursor: pointer;
+      text-decoration: none;
+      color: black;
+      transition: all 0.3s ease;
+
+      &:hover {
+        scale: 1.05;
+        color: #fece51;
+      }
     }
 
     .user {
