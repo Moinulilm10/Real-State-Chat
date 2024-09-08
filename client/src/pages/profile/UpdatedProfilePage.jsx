@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import noAvatar from "../../assets/noavatar.jpg";
+import api from "../../components/lib/axiosInstance";
 import { AuthContext } from "../../contexts/AuthContext";
 import "../../style/updatedprofilepage.scss";
 
@@ -8,14 +9,33 @@ function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
 
   const [error, setError] = useState("");
-  const [avatar, setAvatar] = useState([]);
 
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const { username, email, password } = Object.fromEntries(formData);
+
+    try {
+      const res = await api.put(`/users/${currentUser.id}`, {
+        username,
+        email,
+        password,
+      });
+      updateUser(res.data);
+      navigate("/profile");
+    } catch (err) {
+      console.log(err);
+      setError(err.response.data.message);
+    }
+  };
 
   return (
     <div className="profileUpdatePage">
       <div className="formContainer">
-        <form>
+        <form onSubmit={handleSubmit}>
           <h1>Update Profile</h1>
           <div className="item">
             <label htmlFor="username">Username</label>
@@ -40,6 +60,7 @@ function ProfileUpdatePage() {
             <input id="password" name="password" type="password" />
           </div>
           <button>Update</button>
+          {error && <span>error</span>}
         </form>
       </div>
       <div className="sideContainer">
