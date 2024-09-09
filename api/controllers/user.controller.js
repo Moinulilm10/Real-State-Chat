@@ -1,9 +1,14 @@
 import bcrypt from "bcryptjs";
-import prisma from "../lib/prisma.js";
+import {
+  getAllUsers,
+  getUserById,
+  userDelete,
+  userUpdate,
+} from "../models/Users.model.js";
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await getAllUsers();
     res.status(200).json(users);
   } catch (err) {
     console.log(err);
@@ -14,9 +19,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   const id = req.params.id;
   try {
-    const user = await prisma.user.findUnique({
-      where: { id },
-    });
+    const user = await getUserById(id);
     res.status(200).json(user);
   } catch (err) {
     console.log(err);
@@ -40,13 +43,18 @@ export const updateUser = async (req, res) => {
       updatedPassword = await bcrypt.hash(password, 10);
     }
 
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: {
-        ...inputs,
-        ...(updatedPassword && { password: updatedPassword }),
-        ...(avatar && { avatar }),
-      },
+    // const updatedUser = await prisma.user.update({
+    //   where: { id },
+    //   data: {
+    //     ...inputs,
+    //     ...(updatedPassword && { password: updatedPassword }),
+    //     ...(avatar && { avatar }),
+    //   },
+    // });
+
+    const updatedUser = await userUpdate(id, {
+      ...inputs,
+      ...(avatar && { avatar }),
     });
 
     const { password: userPassword, ...rest } = updatedUser;
@@ -66,9 +74,7 @@ export const deleteUser = async (req, res) => {
     return res.status(403).json({ message: "Not Authorized!" });
   }
   try {
-    await prisma.user.delete({
-      where: { id },
-    });
+    const result = await userDelete(id);
     res.status(200).json({ message: "User deleted" });
   } catch (err) {
     console.log(err);
