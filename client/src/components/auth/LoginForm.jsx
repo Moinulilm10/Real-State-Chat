@@ -31,7 +31,7 @@ const LoginForm = () => {
 
       // console.log(res.data);
 
-      updateUser(res.data);
+      updateUser(res?.data);
 
       navigate("/");
     } catch (error) {

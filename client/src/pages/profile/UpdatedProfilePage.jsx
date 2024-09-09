@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import noAvatar from "../../assets/noavatar.jpg";
 import api from "../../components/lib/axiosInstance";
+import UploadWidget from "../../components/uploadwidget/UploadWidget";
 import { AuthContext } from "../../contexts/AuthContext";
 import "../../style/updatedprofilepage.scss";
 
@@ -9,6 +10,7 @@ function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
 
   const [error, setError] = useState("");
+  const [avatar, setAvatar] = useState([]);
 
   const navigate = useNavigate();
 
@@ -23,8 +25,9 @@ function ProfileUpdatePage() {
         username,
         email,
         password,
+        avatar: avatar[0],
       });
-      updateUser(res.data);
+      updateUser(res?.data);
       navigate("/profile");
     } catch (err) {
       console.log(err);
@@ -64,7 +67,21 @@ function ProfileUpdatePage() {
         </form>
       </div>
       <div className="sideContainer">
-        <img src={currentUser.avatar || noAvatar} alt="" className="avatar" />
+        <img
+          src={avatar[0] || currentUser.avatar || noAvatar}
+          alt="avatar_image"
+          className="avatar"
+        />
+        <UploadWidget
+          uwConfig={{
+            cloudName: "dz62mu0ob",
+            uploadPreset: "estate",
+            multiple: false,
+            maxImageFileSize: 2000000,
+            folder: "avatars",
+          }}
+          setState={setAvatar}
+        />
       </div>
     </div>
   );
