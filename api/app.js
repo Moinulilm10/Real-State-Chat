@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import authRoute from "./routes/auth.route.js";
-import postRouter from "./routes/post.route.js";
+import postRoute from "./routes/post.route.js";
 import testRoute from "./routes/test.route.js";
 import userRoute from "./routes/user.route.js";
 
@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoute);
 app.use("/api/test", testRoute);
 app.use("/api/users", userRoute);
-app.use("/api/posts", postRouter);
+app.use("/api/posts", postRoute);
 
 app.listen(8000, () => {
   console.log("http://localhost:8000");

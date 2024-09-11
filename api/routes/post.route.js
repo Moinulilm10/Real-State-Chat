@@ -8,12 +8,12 @@ import {
 } from "../controllers/post.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
-const postRouter = express.Router();
+const router = express.Router();
 
-postRouter.get("/", getPosts);
-postRouter.get("/:id", getPost);
-postRouter.post("/", verifyToken, addPost);
-postRouter.put("/:id", verifyToken, updatePost);
-postRouter.delete("/:id", verifyToken, deletePost);
+router.get("/", getPosts);
+router.get("/:id", getPost);
+router.post("/", verifyToken, addPost);
+router.put("/:id", verifyToken, updatePost);
+router.delete("/:id", verifyToken, deletePost);
 
-export default postRouter;
+export default router;
