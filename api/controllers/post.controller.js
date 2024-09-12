@@ -1,9 +1,7 @@
-import jwt from "jsonwebtoken";
 import {
   createNewPost,
   deletePostById,
   findPostById,
-  findSavedPost,
   getAllPosts,
   updatePostById,
 } from "../models/Post.model.js";
@@ -33,18 +31,20 @@ export const getPost = async (req, res) => {
       return res.status(404).json({ message: "Post not found!" });
     }
 
-    if (token) {
-      jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
-        if (!err) {
-          const saved = await findSavedPost(payload.id, id);
-          return res
-            .status(200)
-            .json({ ...post, isSaved: saved ? true : false });
-        }
-      });
-    } else {
-      res.status(200).json({ ...post, isSaved: false });
-    }
+    // if (token) {
+    //   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+    //     if (!err) {
+    //       const saved = await findSavedPost(payload.id, id);
+    //       return res
+    //         .status(200)
+    //         .json({ ...post, isSaved: saved ? true : false });
+    //     }
+    //   });
+    // } else {
+    //   res.status(200).json({ ...post, isSaved: false });
+    // }
+
+    res.status(200).json(post);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to get post" });
@@ -52,12 +52,15 @@ export const getPost = async (req, res) => {
 };
 
 export const addPost = async (req, res) => {
-  const body = req.body;
-  console.log(body);
+  const { postData, postDetail } = req.body;
   const tokenUserId = req.userId;
+  console.log(req.body);
+
+  console.log(postData);
+  console.log(postDetail);
 
   try {
-    const newPost = await createNewPost(body, tokenUserId);
+    const newPost = await createNewPost(postData, postDetail, tokenUserId);
     res.status(200).json(newPost);
   } catch (err) {
     console.log(err);

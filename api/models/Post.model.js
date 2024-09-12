@@ -29,18 +29,21 @@ export const getAllPosts = async (query) => {
 };
 
 /**
- * The `createPost` function adds a new post to the database.
+ * The `createNewPost` function adds a new post to the database.
  * @param {object} postData - Contains the main post information.
  * @param {object} postDetail - Contains additional post details.
  * @param {string} tokenUserId - The ID of the user creating the post.
  * @returns {Promise<object>} - The newly created post.
  */
-export const createNewPost = async (postData, tokenUserId) => {
+export const createNewPost = async (postData, postDetail, tokenUserId) => {
   try {
     const newPost = await prisma.post.create({
       data: {
         ...postData,
         userId: tokenUserId,
+        postDetail: {
+          create: postDetail,
+        },
       },
     });
     return newPost;
