@@ -27,10 +27,10 @@ function Navbar() {
           <div className="user">
             <img src={currentUser.avatar || noAvatar} alt="profile photo" />
             <span>{currentUser.username}</span>
-            <a href="/profile" className="profile">
+            <Link to="/profile" className="profile">
               <div className="notification">3</div>
               <span>Profile</span>
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="user">
