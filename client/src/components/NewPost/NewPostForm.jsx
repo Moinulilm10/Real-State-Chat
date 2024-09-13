@@ -1,17 +1,53 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 import "../../style/newpostpage.scss";
+import api from "../lib/axiosInstance";
 
 const NewPostForm = () => {
   const [value, setValue] = useState("");
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData);
+
+    try {
+      const res = await api.post("/posts", {
+        postData: {
+          title: inputs.title,
+          price: parseInt(inputs.price),
+          address: inputs.address,
+          city: inputs.city,
+          bedroom: parseInt(inputs.bedroom),
+          bathroom: parseInt(inputs.bathroom),
+          type: inputs.type,
+          property: inputs.property,
+          latitude: inputs.latitude,
+          longitude: inputs.longitude,
+          images: images,
+        },
+        postDetail: {
+          desc: value,
+          utilities: inputs.utilities,
+          pet: inputs.pet,
+          income: inputs.income,
+          size: parseInt(inputs.size),
+          school: parseInt(inputs.school),
+          bus: parseInt(inputs.bus),
+          restaurant: parseInt(inputs.restaurant),
+        },
+      });
+      navigate("/" + res.data.id);
+    } catch (err) {
+      console.log(err);
+      setError(err);
+    }
   };
 
   return (
@@ -111,6 +147,7 @@ const NewPostForm = () => {
         <input min={0} id="restaurant" name="restaurant" type="number" />
       </div>
       <button className="sendButton">Add</button>
+      {error && <span>error</span>}
     </form>
   );
 };
