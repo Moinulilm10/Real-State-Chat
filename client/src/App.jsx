@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { singlePageLoader } from "./components/lib/loaders";
 import { Layout, RequireAuth } from "./components/ui/Layout";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
@@ -27,6 +28,7 @@ function App() {
         {
           path: "/:id",
           element: <SingleDetailsPage />,
+          loader: singlePageLoader,
         },
         {
           path: "/profile",
