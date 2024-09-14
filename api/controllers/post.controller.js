@@ -1,8 +1,11 @@
+import jwt from "jsonwebtoken";
 import {
   createNewPost,
   deletePostById,
   findPostById,
+  findPostWithDetailsById,
   getAllPosts,
+  isPostSavedByUser,
   updatePostById,
 } from "../models/Post.model.js";
 
@@ -21,30 +24,28 @@ export const getPosts = async (req, res) => {
 };
 
 export const getPost = async (req, res) => {
-  const id = req.params.id;
-  const token = req.cookies?.token;
+  const { id } = req.params;
+
   try {
-    // Fetch post with details and user information
-    const post = await findPostById(id, true);
+    const post = await findPostWithDetailsById(id);
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found!" });
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    // if (token) {
-    //   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
-    //     if (!err) {
-    //       const saved = await findSavedPost(payload.id, id);
-    //       return res
-    //         .status(200)
-    //         .json({ ...post, isSaved: saved ? true : false });
-    //     }
-    //   });
-    // } else {
-    //   res.status(200).json({ ...post, isSaved: false });
-    // }
+    const token = req.cookies?.token;
+    let isSaved = false;
 
-    res.status(200).json(post);
+    if (token) {
+      jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, payload) => {
+        if (!err) {
+          isSaved = await isPostSavedByUser(payload.id, id);
+          return res.status(200).json({ ...post, isSaved });
+        }
+      });
+    } else {
+      return res.status(200).json({ ...post, isSaved: false });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Failed to get post" });

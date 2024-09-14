@@ -1,11 +1,32 @@
 import DOMPurify from "dompurify";
-import { useLoaderData } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import api from "../components/lib/axiosInstance.js";
 import Map from "../components/map/Map.jsx";
 import Slider from "../components/ui/Slider.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 import "../style/singlepage.scss";
 
 const SingleDetailsPage = () => {
   const post = useLoaderData();
+  const [saved, setSaved] = useState(post.isSaved);
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  console.log(post);
+
+  const handleSave = async () => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+    setSaved((prev) => !prev);
+    try {
+      await api.post("/users/save", { postId: post.id });
+    } catch (err) {
+      console.log(err);
+      setSaved((prev) => !prev);
+    }
+  };
+
   return (
     <div className="singlePage">
       <div className="details">
@@ -122,7 +143,7 @@ const SingleDetailsPage = () => {
               <img src="/chat.png" alt="" />
               Send a Message
             </button>
-            {/* <button
+            <button
               onClick={handleSave}
               style={{
                 backgroundColor: saved ? "#fece51" : "white",
@@ -130,7 +151,7 @@ const SingleDetailsPage = () => {
             >
               <img src="/save.png" alt="" />
               {saved ? "Place Saved" : "Save the Place"}
-            </button> */}
+            </button>
           </div>
         </div>
       </div>

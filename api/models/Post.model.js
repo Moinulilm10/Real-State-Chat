@@ -139,3 +139,52 @@ export const updatePostById = async (id, updateData) => {
     throw new Error("Failed to update post");
   }
 };
+
+/**
+ * Finds a post by its ID, with details and user information.
+ * @param {string} id - The ID of the post to find.
+ * @returns {Promise<object|null>} - The found post or `null` if not found.
+ */
+export const findPostWithDetailsById = async (id) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        postDetail: true,
+        user: {
+          select: {
+            username: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+    return post;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to retrieve post");
+  }
+};
+
+/**
+ * Checks if the post is saved by a specific user.
+ * @param {string} userId - The ID of the user.
+ * @param {string} postId - The ID of the post.
+ * @returns {Promise<boolean>} - True if the post is saved, false otherwise.
+ */
+export const isPostSavedByUser = async (userId, postId) => {
+  try {
+    const savedPost = await prisma.savedPost.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+    return !!savedPost; // Returns true if saved, false otherwise
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to check saved status");
+  }
+};

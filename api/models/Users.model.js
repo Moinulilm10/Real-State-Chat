@@ -109,3 +109,65 @@ export const userDelete = async (id) => {
     throw new Error("Failed to delete user");
   }
 };
+
+/**
+ * Finds a saved post by userId and postId.
+ * @param {string} userId - The ID of the user.
+ * @param {string} postId - The ID of the post.
+ * @returns {Promise<object>} - The saved post if found, or `null` if not found.
+ */
+export const findSavedPost = async (userId, postId) => {
+  try {
+    const savedPost = await prisma.savedPost.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+    return savedPost;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to find saved post");
+  }
+};
+
+/**
+ * Deletes a saved post by its ID.
+ * @param {string} savedPostId - The ID of the saved post to delete.
+ * @returns {Promise<void>}
+ */
+export const deleteSavedPost = async (savedPostId) => {
+  try {
+    await prisma.savedPost.delete({
+      where: {
+        id: savedPostId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to delete saved post");
+  }
+};
+
+/**
+ * Creates a new saved post.
+ * @param {string} userId - The ID of the user saving the post.
+ * @param {string} postId - The ID of the post to be saved.
+ * @returns {Promise<object>} - The newly created saved post.
+ */
+export const createSavedPost = async (userId, postId) => {
+  try {
+    const newSavedPost = await prisma.savedPost.create({
+      data: {
+        userId,
+        postId,
+      },
+    });
+    return newSavedPost;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to create saved post");
+  }
+};
