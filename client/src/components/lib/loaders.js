@@ -14,15 +14,8 @@ export const listPageLoader = async ({ request, params }) => {
 };
 
 export const profilePageLoader = async () => {
-  try {
-    const postPromise = api("/users/profilePosts");
-    return defer({
-      postResponse: postPromise,
-    });
-  } catch (error) {
-    console.error("Error in profilePageLoader:", error);
-    return defer({
-      postResponse: Promise.reject(error),
-    });
-  }
+  const postPromise = api("/users/profilePosts");
+  return defer({
+    postResponse: postPromise,
+  });
 };
