@@ -7,6 +7,8 @@ import "../style/listpage.scss";
 
 const ListPage = () => {
   const data = useLoaderData();
+  console.log("🚀 ~ ListPage ~ data:", data.postResponse);
+
   return (
     <div className="listPage">
       <div className="listContainer">

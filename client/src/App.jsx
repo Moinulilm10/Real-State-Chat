@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { listPageLoader, singlePageLoader } from "./components/lib/loaders";
+import {
+  listPageLoader,
+  profilePageLoader,
+  singlePageLoader,
+} from "./components/lib/loaders";
 import { Layout, RequireAuth } from "./components/ui/Layout";
 import HomePage from "./pages/HomePage";
 import ListPage from "./pages/ListPage";
@@ -32,10 +36,6 @@ function App() {
           loader: singlePageLoader,
         },
         {
-          path: "/profile",
-          element: <ProfilePage />,
-        },
-        {
           path: "/login",
           element: <LoginPage />,
         },
@@ -56,6 +56,7 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />,
+          loader: profilePageLoader,
         },
         {
           path: "/profile/update",

@@ -14,10 +14,15 @@ export const listPageLoader = async ({ request, params }) => {
 };
 
 export const profilePageLoader = async () => {
-  const postPromise = api("/users/profilePosts");
-  const chatPromise = api("/chats");
-  return defer({
-    postResponse: postPromise,
-    chatResponse: chatPromise,
-  });
+  try {
+    const postPromise = api("/users/profilePosts");
+    return defer({
+      postResponse: postPromise,
+    });
+  } catch (error) {
+    console.error("Error in profilePageLoader:", error);
+    return defer({
+      postResponse: Promise.reject(error),
+    });
+  }
 };

@@ -171,3 +171,40 @@ export const createSavedPost = async (userId, postId) => {
     throw new Error("Failed to create saved post");
   }
 };
+
+/**
+ * Retrieves all posts created by a specific user.
+ * @param {string} userId - The ID of the user.
+ * @returns {Promise<object[]>} - The list of posts created by the user.
+ */
+export const getUserPosts = async (userId) => {
+  try {
+    const userPosts = await prisma.post.findMany({
+      where: { userId },
+    });
+    return userPosts;
+  } catch (error) {
+    console.error("Error in getUserPosts:", error);
+    throw new Error("Failed to get user posts");
+  }
+};
+
+/**
+ * Retrieves all saved posts for a specific user.
+ * @param {string} userId - The ID of the user.
+ * @returns {Promise<object[]>} - The list of posts saved by the user.
+ */
+export const getSavedPostsByUser = async (userId) => {
+  try {
+    const savedPosts = await prisma.savedPost.findMany({
+      where: { userId },
+      include: {
+        post: true, // Include the related post information
+      },
+    });
+    return savedPosts.map((item) => item.post); // Return only the post data
+  } catch (error) {
+    console.error("Error in getSavedPostsByUser:", error);
+    throw new Error("Failed to get saved posts");
+  }
+};

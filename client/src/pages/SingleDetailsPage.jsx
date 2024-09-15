@@ -12,7 +12,7 @@ const SingleDetailsPage = () => {
   const [saved, setSaved] = useState(post.isSaved);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  console.log(post);
+  // console.log(post);
 
   const handleSave = async () => {
     if (!currentUser) {
