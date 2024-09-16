@@ -1,7 +1,38 @@
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import chatIcon from "../../../public/chat.png";
+import saveIcon from "../../../public/save.png";
+import { AuthContext } from "../../contexts/AuthContext";
 import "../../style/card.scss";
+import api from "../lib/axiosInstance";
 
 const Card = ({ item }) => {
+  const data = useLoaderData();
+
+  const [saved, setSaved] = useState(item.isSaved || false);
+  console.log("🚀 ~ Card ~ saved:", item.id);
+
+  const { currentUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const handleSave = async () => {
+    if (!currentUser) {
+      return navigate("/login");
+    }
+
+    setSaved((prev) => !prev);
+
+    try {
+      // API call to save or unsave the post
+      await api.post("/users/save", { postId: item.id });
+    } catch (err) {
+      console.error("Failed to save/unsave post:", err);
+      // Revert the saved state if the request fails
+      setSaved((prev) => !prev);
+    }
+  };
+
   return (
     <div className="card">
       <Link to={`/${item.id}`} className="imageContainer">
@@ -28,11 +59,17 @@ const Card = ({ item }) => {
             </div>
           </div>
           <div className="icons">
-            <div className="icon">
-              <img src="/save.png" alt="" />
+            <div
+              className="icon"
+              onClick={handleSave}
+              style={{
+                backgroundColor: saved ? "#fece51" : "",
+              }}
+            >
+              <img src={saveIcon} alt="save_icon" />
             </div>
             <div className="icon">
-              <img src="/chat.png" alt="" />
+              <img src={chatIcon} alt="chat_icon" />
             </div>
           </div>
         </div>

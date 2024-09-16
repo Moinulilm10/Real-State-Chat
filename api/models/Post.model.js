@@ -114,6 +114,7 @@ export const findSavedPost = async (userId, postId) => {
         },
       },
     });
+
     return savedPost;
   } catch (error) {
     console.log(error);
