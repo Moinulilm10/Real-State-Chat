@@ -111,29 +111,6 @@ export const userDelete = async (id) => {
 };
 
 /**
- * Finds a saved post by userId and postId.
- * @param {string} userId - The ID of the user.
- * @param {string} postId - The ID of the post.
- * @returns {Promise<object>} - The saved post if found, or `null` if not found.
- */
-export const findSavedPost = async (userId, postId) => {
-  try {
-    const savedPost = await prisma.savedPost.findUnique({
-      where: {
-        userId_postId: {
-          userId,
-          postId,
-        },
-      },
-    });
-    return savedPost;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to find saved post");
-  }
-};
-
-/**
  * Deletes a saved post by its ID.
  * @param {string} savedPostId - The ID of the saved post to delete.
  * @returns {Promise<void>}
@@ -173,6 +150,22 @@ export const createSavedPost = async (userId, postId) => {
 };
 
 /**
+ * Delete a saved post by its ID
+ */
+export const deleteSavedPostById = async (id) => {
+  try {
+    return await prisma.savedPost.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.error("Error in deleteSavedPostById:", error);
+    throw new Error("Failed to delete saved post");
+  }
+};
+
+/**
  * Retrieves all posts created by a specific user.
  * @param {string} userId - The ID of the user.
  * @returns {Promise<object[]>} - The list of posts created by the user.
@@ -199,10 +192,10 @@ export const getSavedPostsByUser = async (userId) => {
     const savedPosts = await prisma.savedPost.findMany({
       where: { userId },
       include: {
-        post: true, // Include the related post information
+        post: true,
       },
     });
-    return savedPosts.map((item) => item.post); // Return only the post data
+    return savedPosts.map((item) => item.post);
   } catch (error) {
     console.error("Error in getSavedPostsByUser:", error);
     throw new Error("Failed to get saved posts");
