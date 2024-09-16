@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import chatIcon from "../../../public/chat.png";
 import saveIcon from "../../../public/save.png";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -7,10 +7,7 @@ import "../../style/card.scss";
 import api from "../lib/axiosInstance";
 
 const Card = ({ item }) => {
-  const data = useLoaderData();
-
-  const [saved, setSaved] = useState(item.isSaved || false);
-  console.log("🚀 ~ Card ~ saved:", item.id);
+  const [saved, setSaved] = useState(item.id || false);
 
   const { currentUser } = useContext(AuthContext);
 
