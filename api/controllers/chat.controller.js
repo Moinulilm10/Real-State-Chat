@@ -2,6 +2,7 @@ import {
   createChat,
   getAllChatsByUser,
   getChatByIdAndUser,
+  getUserById,
   markChatAsRead,
 } from "../models/Chat.model.js";
 
@@ -17,6 +18,16 @@ export const getChats = async (req, res) => {
 
   try {
     const chats = await getAllChatsByUser(tokenUserId);
+
+    // For each chat, find the receiver's details
+    for (const chat of chats) {
+      const receiverId = chat.userIDs.find((id) => id !== tokenUserId);
+
+      // Fetch the receiver user data
+      const receiver = await getUserById(receiverId);
+      chat.receiver = receiver; // Append receiver info to each chat object
+    }
+
     res.status(200).json(chats);
   } catch (error) {
     console.error("Error while fetching chats:", error);
@@ -37,6 +48,7 @@ export const getChat = async (req, res) => {
 
   try {
     const chat = await getChatByIdAndUser(chatId, tokenUserId);
+
     if (!chat) {
       return res.status(404).json({ message: "Chat not found!" });
     }

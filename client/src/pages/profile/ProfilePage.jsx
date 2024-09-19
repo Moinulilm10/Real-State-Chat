@@ -10,6 +10,8 @@ import List from "../List";
 const ProfilePage = () => {
   const data = useLoaderData();
 
+  console.log(data);
+
   const navigate = useNavigate();
 
   const { updateUser, currentUser } = useContext(AuthContext);
@@ -24,9 +26,9 @@ const ProfilePage = () => {
     }
   };
 
-  if (!data || !data.postResponse) {
-    return <div>Loading...</div>;
-  }
+  // if (!data || !data.postResponse) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="profilePage">
@@ -83,7 +85,14 @@ const ProfilePage = () => {
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Chat />
+          <Suspense fallback={<p>Loading...</p>}>
+            <Await
+              resolve={data.chatResponse}
+              errorElement={<p>Error loading chats!</p>}
+            >
+              {(chatResponse) => <Chat chats={chatResponse.data} />}
+            </Await>
+          </Suspense>
         </div>
       </div>
     </div>

@@ -9,9 +9,28 @@ import prisma from "../lib/prisma.js";
 export const getAllChatsByUser = async (tokenUserId) => {
   return await prisma.chat.findMany({
     where: {
-      userIds: {
+      userIDs: {
         hasSome: [tokenUserId],
       },
+    },
+  });
+};
+
+/**
+ * Fetch a user by their ID.
+ *
+ * @param {string} userId - The ID of the user to fetch.
+ * @returns {Promise<Object>} The user object with selected fields (id, username, avatar).
+ */
+export const getUserById = async (userId) => {
+  return await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      username: true,
+      avatar: true,
     },
   });
 };
