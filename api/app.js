@@ -24,8 +24,10 @@ app.use("/api/posts", postRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
 
-app.listen(8000, () => {
-  console.log("http://localhost:8000");
+const Port = process.env.PORT;
+
+app.listen(Port, () => {
+  console.log(`http://localhost:${Port}`);
 });
 
 // console-ninja node --watch app.js
