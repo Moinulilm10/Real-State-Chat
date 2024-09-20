@@ -1,15 +1,22 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { format } from "timeago.js";
 import avatarImage from "../../../public/noavatar.png";
 import { AuthContext } from "../../contexts/AuthContext";
+import { SocketContext } from "../../contexts/SocketContext";
 import "../../style/chat.scss";
 import api from "../lib/axiosInstance";
 
 const Chat = ({ chats }) => {
   const [chat, setChat] = useState(null);
-  const { currentUser } = useContext(AuthContext);
 
-  // console.log(chats);
+  const { currentUser } = useContext(AuthContext);
+  const { socket } = useContext(SocketContext);
+
+  const messageEndRef = useRef();
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +30,10 @@ const Chat = ({ chats }) => {
       const res = await api.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
       e.target.reset();
+      socket.emit("sendMessage", {
+        receiverId: chat.receiver.id,
+        data: res.data,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -37,6 +48,28 @@ const Chat = ({ chats }) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    const read = async () => {
+      try {
+        await api.put("/chats/read/" + chat.id);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (chat && socket) {
+      socket.on("getMessage", (data) => {
+        if (chat.id === data.chatId) {
+          setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
+          read();
+        }
+      });
+    }
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket, chat]);
 
   return (
     <div className="chat">
@@ -92,6 +125,7 @@ const Chat = ({ chats }) => {
                 <span>{format(message.createdAt)}</span>
               </div>
             ))}
+            <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
             <textarea name="text"></textarea>
