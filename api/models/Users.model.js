@@ -201,3 +201,24 @@ export const getSavedPostsByUser = async (userId) => {
     throw new Error("Failed to get saved posts");
   }
 };
+
+/**
+ * Count the number of unseen chats for a specific user.
+ *
+ * @param {string} tokenUserId - The ID of the authenticated user.
+ * @returns {Promise<number>} The number of unseen chats.
+ */
+export const countUnseenChats = async (tokenUserId) => {
+  return await prisma.chat.count({
+    where: {
+      userIDs: {
+        hasSome: [tokenUserId],
+      },
+      NOT: {
+        seenBy: {
+          hasSome: [tokenUserId],
+        },
+      },
+    },
+  });
+};

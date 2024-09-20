@@ -5,6 +5,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { SocketContext } from "../../contexts/SocketContext";
 import "../../style/chat.scss";
 import api from "../lib/axiosInstance";
+import { useNotificationStore } from "../lib/notificationStore";
 
 const Chat = ({ chats }) => {
   const [chat, setChat] = useState(null);
@@ -13,6 +14,8 @@ const Chat = ({ chats }) => {
   const { socket } = useContext(SocketContext);
 
   const messageEndRef = useRef();
+
+  const decrease = useNotificationStore((state) => state.decrease);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,7 +45,9 @@ const Chat = ({ chats }) => {
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await api("/chats/" + id);
-
+      if (!res.data.seenBy.includes(currentUser.id)) {
+        decrease();
+      }
       setChat({ ...res.data, receiver });
     } catch (err) {
       console.log(err);

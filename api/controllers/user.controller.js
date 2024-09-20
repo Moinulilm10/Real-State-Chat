@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { findSavedPost } from "../models/Post.model.js";
 import {
+  countUnseenChats,
   createSavedPost,
   deleteSavedPostById,
   getAllUsers,
@@ -149,13 +150,20 @@ export const profilePosts = async (req, res) => {
 };
 
 /**
- * Get the notification count for the user (placeholder)
- * This function currently has no implementation.
+ * Get the number of unseen chats for the authenticated user.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>} Returns a JSON response with the count of unseen chats.
  */
 export const getNotificationNumber = async (req, res) => {
+  const tokenUserId = req.userId;
+
   try {
+    const number = await countUnseenChats(tokenUserId);
+    res.status(200).json(number);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Failed to get profile posts!" });
+    console.error("Error while fetching notification count:", err);
+    res.status(500).json({ message: "Failed to get notification count!" });
   }
 };
